@@ -62,21 +62,8 @@ streamlit run app.py
 4. **Open your browser**
 - The app will automatically open at `http://localhost:8501`
 
-## 🌐 Deployment on Streamlit Cloud
-
-1. **Push your code to GitHub**
-   - Ensure all files (app.py, rf_model.pkl, scaler.pkl, requirements.txt) are committed
-
-2. **Deploy on Streamlit Cloud**
-   - Go to [share.streamlit.io](https://share.streamlit.io)
-   - Sign in with GitHub
-   - Click "New app"
-   - Select your repository
-   - Set main file path: `app.py`
-   - Click "Deploy"
-
-3. **Your app will be live!**
-   - Share the URL with anyone
+## 🌐 Live Demo
+**Try it here:** [your-app-url.streamlit.app] 
 
 ## 📖 How to Use
 
