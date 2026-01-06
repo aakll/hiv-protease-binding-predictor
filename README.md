@@ -181,12 +181,10 @@ This project is for educational and research purposes.
 
 ## 👨‍🔬 Author
 
-**[Your Name]**  
+**Ali Kawar**  
 Bioinformatics Student, Lebanese American University  
 CGPA: 3.77
 
 ---
-
-*Developed as part of application for Global Research Immersion Program for Young Scientists 2026*
 
 **Research Areas**: AI in Drug Discovery | Computational Biology | Machine Learning for Therapeutics
