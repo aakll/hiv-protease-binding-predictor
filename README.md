@@ -1,6 +1,6 @@
 # Descriptor-Based Prediction of Ligand Binding Affinity for HIV-1 Protease: Applications in Early Drug Discovery
 
-I investigated whether ligand molecular descriptors alone can predict the binding affinity (ΔG) to HIV-1 protease (PDB: 1HVR), aiming to assess the potential of descriptor-based machine learning models as a fast-screening tool to reduce the need for computationally expensive docking simulations. I also expanded the study to analyze pharmaceutical relevance, including drug-likeness and FDA-approved drug validation, to demonstrate the model's applications in early-stage drug discovery.
+This project investigates whether ligand molecular descriptors alone can predict the binding affinity (ΔG) to HIV-1 protease (PDB: 1HVR), aiming to assess the potential of descriptor-based machine learning models as a fast-screening tool to reduce the need for computationally expensive docking simulations. The study is further extended to assess pharmaceutical relevance, including drug-likeness and FDA-approved drug validation, to demonstrate the model's applications in early-stage drug discovery.
 
 ---
 
