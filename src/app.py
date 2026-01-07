@@ -7,6 +7,10 @@ import numpy as np
 import pickle
 import requests
 
+from pathlib import Path  
+
+BASE_DIR = Path(__file__).resolve().parent.parent  
+
 # Page configuration
 st.set_page_config(
     page_title="HIV Protease Binding Predictor",
@@ -17,10 +21,10 @@ st.set_page_config(
 # Load model and scaler
 @st.cache_resource
 def load_model():
-    with open('models/rf_model.pkl', 'rb') as f:
-        model = pickle.load(f)
-    with open('models/scaler.pkl', 'rb') as f:
-        scaler = pickle.load(f)
+    with open(BASE_DIR / "models" / "rf_model.pkl", "rb") as f:
+         model = pickle.load(f)
+    with open(BASE_DIR / "models" / "scaler.pkl", "rb") as f:
+         scaler = pickle.load(f)
     return model, scaler
 
 # Fetch ligand properties from PubChem
