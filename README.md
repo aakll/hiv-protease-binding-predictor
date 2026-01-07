@@ -1,14 +1,23 @@
-# HIV-1 Protease Binding Affinity Predictor
+# Predicting HIV-1 Protease Binding Affinity Using Molecular Descriptors
 
-Machine-learning–based framework for predicting protein–ligand binding affinity (ΔG) to HIV-1 protease (PDB: 1HVR), designed to accelerate virtual screening in early-stage drug discovery.
+I investigated whether molecular descriptors alone can predict the binding affinity (ΔG) of ligands to HIV-1 protease (PDB: 1HVR), aiming to assess the potential of descriptor-based machine learning models to reduce the need for computationally expensive docking simulations. I also expanded the study to analyze pharmaceutical relevance, including drug-likeness and FDA-approved drug validation, to demonstrate applications in early-stage drug discovery.
 
 ---
 
 ## Project Overview
 
-This project implements an end-to-end computational drug discovery workflow combining molecular docking, cheminformatics, and supervised machine learning.
+This project implements a hypothesis-driven computational workflow combining molecular docking, descriptor-based machine learning, and drug analysis:
 
-The model is intended as a **high-throughput pre-screening tool** to prioritize compounds for subsequent docking or experimental validation.
+- **Data generation:** Docked 50 ligands to HIV-1 protease using AutoDock Vina.  
+- **Feature engineering:** Collected molecular descriptors from PubChem (MW, LogP, HBD, HBA).  
+- **Machine learning:** Trained a Random Forest regression model to predict binding affinities.  
+- **Drug analysis:**  
+  - Assessed drug-likeness using Lipinski’s Rule of Five  
+  - Validated predicted top binders against FDA-approved HIV protease inhibitors  
+- **Virtual screening:** Applied the model to a library of 1000 virtual compounds to prioritize potential drug candidates.  
+
+All analyses and results are documented in the `notebooks/` folder.
+
 
 ---
 
