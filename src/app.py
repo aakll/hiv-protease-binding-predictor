@@ -18,14 +18,14 @@ st.set_page_config(
     layout="wide"
 )
 
-# Load model and scaler
-@st.cache_resource
-def load_model():
-    with open(BASE_DIR / "models" / "rf_model.pkl", "rb") as f:
-         model = pickle.load(f)
-    with open(BASE_DIR / "models" / "scaler.pkl", "rb") as f:
-         scaler = pickle.load(f)
-    return model, scaler
+# # Load model and scaler
+# @st.cache_resource
+# def load_model():
+#     with open(BASE_DIR / "models" / "rf_model.pkl", "rb") as f:
+#          model = pickle.load(f)
+#     with open(BASE_DIR / "models" / "scaler.pkl", "rb") as f:
+#          scaler = pickle.load(f)
+#     return model, scaler
 
 # Fetch ligand properties from PubChem
 def get_ligand_properties(cid):
