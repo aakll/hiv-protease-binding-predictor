@@ -103,11 +103,13 @@ def main():
     
     st.markdown("---")
     
-    # Load model
     try:
-        model, scaler = load_model()
+        with open(BASE_DIR / "models" / "rf_model.pkl", "rb") as f:
+            model = pickle.load(f)
+        with open(BASE_DIR / "models" / "scaler.pkl", "rb") as f:
+            scaler = pickle.load(f)
     except FileNotFoundError:
-        st.error("⚠️ Model files not found. Please ensure rf_model.pkl and scaler.pkl are in the same directory.")
+        st.error("⚠️ Model files not found. Please ensure rf_model.pkl and scaler.pkl are in the models/ folder.")
         return
     
     # Input section
