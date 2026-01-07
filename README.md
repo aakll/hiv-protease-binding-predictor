@@ -1,4 +1,4 @@
-# Predicting HIV-1 Protease Binding Affinity Using Molecular Descriptors
+# Predicting Ligand Binding Affinity to HIV-1 Protease Using Molecular Descriptors
 
 I investigated whether molecular descriptors alone can predict the binding affinity (ΔG) of ligands to HIV-1 protease (PDB: 1HVR), aiming to assess the potential of descriptor-based machine learning models to reduce the need for computationally expensive docking simulations. I also expanded the study to analyze pharmaceutical relevance, including drug-likeness and FDA-approved drug validation, to demonstrate applications in early-stage drug discovery.
 
