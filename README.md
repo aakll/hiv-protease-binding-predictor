@@ -9,100 +9,68 @@ I investigated whether molecular descriptors alone can predict the binding affin
 This project implements a hypothesis-driven computational workflow combining molecular docking, descriptor-based machine learning, and drug analysis:
 
 - **Data generation:** Docked 50 ligands to HIV-1 protease using AutoDock Vina.  
-- **Feature engineering:** Collected molecular descriptors from PubChem (MW, LogP, HBD, HBA).  
+- **Feature engineering:** Collected molecular descriptors from PubChem (MW, LogP, HBD, HBA) for ligands.  
 - **Machine learning:** Trained a Random Forest regression model to predict binding affinities.  
 - **Drug analysis:**  
-  - Assessed drug-likeness using Lipinski’s Rule of Five  
-  - Validated predicted top binders against FDA-approved HIV protease inhibitors  
-- **Virtual screening:** Applied the model to a library of 1000 virtual compounds to prioritize potential drug candidates.  
+  - Assessed drug-likeness using Lipinski’s Rule of Five
+  - validate my model by showing that its ability to identify clinically relevant compounds (FDA-approved drugs rank in TOP 26% of all ligands).
+- **Virtual screening:** Applied the model to a library of 1000 virtual compounds to show the model's potential in a real drug discovery pipeline.
 
 All analyses and results are documented in the `notebooks/` folder.
 
+---
+## Research Question
+
+Can molecular descriptors alone reliably predict protein–ligand binding affinity, and can this approach guide early-stage drug discovery by prioritizing potential drug candidates?
 
 ---
-
-## Methodology
-
-### Data Generation
-- 50 ligands docked to HIV-1 protease using AutoDock Vina
-- Binding affinity (ΔG) used as regression target
-
-### Feature Engineering
-- Molecular descriptors retrieved from PubChem:
-  - Molecular Weight (MW)
-  - LogP
-  - Hydrogen Bond Donors (HBD)
-  - Hydrogen Bond Acceptors (HBA)
-
-### Machine Learning
-- Model: Random Forest Regressor
-- Train/Test split: 80/20
-- Feature scaling: StandardScaler
-- Cross-validation: 5-fold CV
-
----
-
 ## Model Performance
 
-| Metric | Value |
-|------|------|
-| R² (test) | 0.866 |
-| RMSE | 0.892 kcal/mol |
-| MAE | 0.721 kcal/mol |
+| Metric        | Value            |
+|---------------|----------------|
+| R² (test)     | 0.866          |
+| RMSE          | 0.892 kcal/mol |
+| MAE           | 0.721 kcal/mol |
 
-The model successfully ranks FDA-approved HIV protease inhibitors among top predicted binders, supporting its relevance for drug discovery prioritization.
+The model demonstrates that molecular descriptors can capture substantial variance in docking-derived binding affinities, supporting their predictive utility for ligand prioritization.
 
 ---
 
+## Virtual Screening and Application
+
+I developed a Streamlit application to demonstrate model predictions and ability to prioritize potential drug candidates:
+
+- Automatically fetches molecular descriptors of ligands from PubChem 
+- Predicts binding affinity for input compounds  
+- Provides drug-likeness assessment and color-coded results  
+- Guides users to focus on high-priority compounds for further docking or experimental testing
+   
+This workflow emphasizes hypothesis testing, model evaluation, and practical application in drug discovery.
+
+---
 ## Repository Structure
 
 ```text
-├── data/               # Raw datasets
-├── notebooks/          # EDA, modeling, and analysis
-├── src/                # Application
-├── models/             # Trained model and scaler
-├── results/            # Figures 
-└── requirements.txt
+├── data/               # Raw datasets  
+│   └── raw/  
+├── notebooks/          # Analysis and modeling notebooks  
+├── src/                # Streamlit app  
+├── models/             # Trained model and scaler  
+├── results/            # Figures, plots, and tables  
+├── requirements.txt    # Python dependencies  
+└── README.md  
 ```
 ---
-## Virtual Screening Application
-
-A Streamlit-based web application enables:
-
- - Real-time binding affinity prediction
- - Automated PubChem property retrieval
- - Drug-likeness (Lipinski) assessment
- - Visual prioritization of candidate compounds
----
-## Run locally
-``` bash
-pip install -r requirements.txt
-streamlit run src/app.py
-```
----
-## Key Findings
-
-  - Strong negative correlation between molecular weight and binding affinity (r ≈ −0.87)
-  - FDA-approved HIV protease inhibitors ranked within the top quartile
-  - ML-based screening reduces the number of compounds requiring docking by >85%
----
-## Applications
-
-  - Virtual screening and lead prioritization
-  - Drug repurposing
-  - Computational cost reduction in early-stage discovery
----
-
 ## Limitations and Future Work
 
-  - Expand dataset size and chemical diversity: Include multiple protein targets for generalization
-  - Integrate structure-based interaction features
-  - Incorporate ADME/Toxicity prediction
-  - Experimental validation of top-ranked candidates
+  - Dataset is limited to 50 ligands and a single protein (1HVR)
+  - Molecular descriptors do not include structural or interaction-based features
+  - Future work could expand to multiple proteins, larger chemical libraries, and integrate ADME/Tox predictions or deep learning models
+  - Experimental validation is needed to confirm predictive utility
+
 ---
+## Author
 
- ## Author
-
-   **Ali Kawar**  
-   Bioinformatics Student, Lebanese American University  
-   Research interests: Machine Learning for Drug Discovery, Computational Biology
+Ali Kawar  
+Bioinformatics Student, Lebanese American University  
+Research interests: Machine Learning for Drug Discovery, Computational Biology
