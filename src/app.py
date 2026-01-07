@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -14,9 +17,9 @@ st.set_page_config(
 # Load model and scaler
 @st.cache_resource
 def load_model():
-    with open('rf_model.pkl', 'rb') as f:
+    with open('models/rf_model.pkl', 'rb') as f:
         model = pickle.load(f)
-    with open('scaler.pkl', 'rb') as f:
+    with open('models/scaler.pkl', 'rb') as f:
         scaler = pickle.load(f)
     return model, scaler
 
@@ -24,7 +27,7 @@ def load_model():
 def get_ligand_properties(cid):
     """
     Fetch ligand properties from PubChem given a CID.
-    Returns: MW, LogP, HBD, HBA
+    Returns: MW, LogP, HBD, HBA as numeric types
     """
     try:
         url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/property/MolecularWeight,XLogP,HBondDonorCount,HBondAcceptorCount/JSON"
@@ -35,11 +38,12 @@ def get_ligand_properties(cid):
         data = response.json()
         props = data['PropertyTable']['Properties'][0]
         
+        # Convert to float/int here
         return {
-            'MW': props.get('MolecularWeight'),
-            'LogP': props.get('XLogP'),
-            'HBD': props.get('HBondDonorCount'),
-            'HBA': props.get('HBondAcceptorCount'),
+            'MW': float(props.get('MolecularWeight', 0)),
+            'LogP': float(props.get('XLogP', 0)),
+            'HBD': int(props.get('HBondDonorCount', 0)),
+            'HBA': int(props.get('HBondAcceptorCount', 0)),
             'success': True
         }
     
@@ -47,6 +51,7 @@ def get_ligand_properties(cid):
         return {'success': False, 'error': f"PubChem API error: {str(e)}"}
     except Exception as e:
         return {'success': False, 'error': f"Error: {str(e)}"}
+
 
 # Predict binding affinity
 def predict_affinity(properties, model, scaler):
@@ -77,22 +82,17 @@ def main():
     # Description
     st.markdown("""
     ### About This Tool
-    This AI-powered tool predicts the binding affinity (ΔG) of ligands to **HIV-1 protease (1HVR)** 
+    This ML tool predicts the binding affinity (ΔG) of ligands to **HIV-1 protease (1HVR)** 
     based on molecular properties, and assesses drug-likeness using Lipinski's Rule of Five. 
     This eliminates the need for computationally expensive molecular docking simulations.
-    
-    **Model Performance:**
-    - Algorithm: Random Forest Regressor
-    - Test R²: 0.866
-    - Test RMSE: 0.892 kcal/mol
-    - Test MAE: 0.721 kcal/mol
-    - Validated against FDA-approved drugs
-    
+                
+                
     **Features:**
+    - 🔗 Direct PubChem integration
     - ⚡ Instant binding affinity prediction
     - 💊 Drug-likeness assessment (Lipinski's Rule of Five)
     - 🎯 Overall drug candidate evaluation
-    - 🔗 Direct PubChem integration
+    
     
     **How to use:** Enter a PubChem Compound ID (CID) below to get predictions.
     """)
@@ -111,21 +111,23 @@ def main():
     
     with col1:
         st.subheader("📥 Input")
-        cid_input = st.text_input(
+        cid_input_raw = st.text_input(
             "Enter PubChem Compound ID (CID):",
             placeholder="e.g., 92727, 5362440, 64143",
             help="Find CIDs at https://pubchem.ncbi.nlm.nih.gov/"
         )
+
+        cid_input = cid_input_raw.strip()  # removes leading/trailing spaces
         
         predict_button = st.button("🔍 Predict Binding Affinity", type="primary")
     
     with col2:
         st.subheader("ℹ️ Example CIDs")
         st.markdown("""
-        - **92727** (Ritonavir)
-        - **5362440** (Darunavir)
-        - **64143** (Saquinavir)
-        - **392622** (Indinavir)
+        - **92727** (Lopinavir)
+        - **5362440** (Indinavir)
+        - **64143** (Nelfinavir)
+        - **392622** (Ritonavir)
         """)
     
     # Prediction
@@ -159,6 +161,33 @@ def main():
                 
                 with prop_col4:
                     st.metric("H-Bond Acceptors", int(properties['HBA']))
+
+                 # Make prediction
+                with st.spinner("Predicting binding affinity..."):
+                    delta_g = predict_affinity(properties, model, scaler)
+                
+                st.markdown("---")
+                st.subheader("🎯 Prediction Result")
+                
+                # Display prediction with color coding
+                if delta_g < -9:
+                    color = "green"
+                    strength = "Strong Binding"
+                elif delta_g < -7:
+                    color = "orange"
+                    strength = "Moderate Binding"
+                else:
+                    color = "red"
+                    strength = "Weak Binding"
+                
+                st.markdown(f"""
+                <div style="padding: 20px; border-radius: 10px; background-color: {color}; color: white; text-align: center;">
+                    <h2>Predicted ΔG: {delta_g:.3f} kcal/mol</h2>
+                    <h3>{strength}</h3>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                st.markdown("---")
                 
                 # Drug-likeness analysis (Lipinski's Rule of Five)
                 st.markdown("---")
@@ -210,32 +239,6 @@ def main():
                     st.warning(f"⚠️ **Not drug-like** ({violations} violations)")
                     st.info("This compound may have poor oral bioavailability. Consider structural modifications.")
                 
-                # Make prediction
-                with st.spinner("Predicting binding affinity..."):
-                    delta_g = predict_affinity(properties, model, scaler)
-                
-                st.markdown("---")
-                st.subheader("🎯 Prediction Result")
-                
-                # Display prediction with color coding
-                if delta_g < -9:
-                    color = "green"
-                    strength = "Strong Binding"
-                elif delta_g < -7:
-                    color = "orange"
-                    strength = "Moderate Binding"
-                else:
-                    color = "red"
-                    strength = "Weak Binding"
-                
-                st.markdown(f"""
-                <div style="padding: 20px; border-radius: 10px; background-color: {color}; color: white; text-align: center;">
-                    <h2>Predicted ΔG: {delta_g:.3f} kcal/mol</h2>
-                    <h3>{strength}</h3>
-                </div>
-                """, unsafe_allow_html=True)
-                
-                st.markdown("---")
                 
                 # Overall drug candidate assessment
                 st.subheader("🏆 Overall Drug Candidate Assessment")
@@ -270,6 +273,16 @@ def main():
     
     # Footer
     st.markdown("---")
+
+    st.markdown("""
+    **Model Performance:**
+    - Algorithm: Random Forest Regressor
+    - Test R²: 0.866
+    - Test RMSE: 0.892 kcal/mol
+    - Test MAE: 0.721 kcal/mol
+    - Validated against FDA-approved drugs
+    """)
+
     st.markdown("""
     <div style="text-align: center; color: gray;">
         <p>🧬 AI-Powered Drug Discovery Tool</p>
