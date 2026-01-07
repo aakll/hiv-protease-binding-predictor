@@ -29,8 +29,8 @@ Can molecular descriptors alone reliably predict protein–ligand binding affini
 | Metric        | Value            |
 |---------------|----------------|
 | R² (test)     | 0.866          |
-| RMSE          | 0.892 kcal/mol |
-| MAE           | 0.721 kcal/mol |
+| RMSE          | 0.891 kcal/mol |
+| MAE           | 0.720 kcal/mol |
 
 The model demonstrates that molecular descriptors can capture substantial variance in docking-derived binding affinities, supporting their predictive utility for ligand prioritization.
 
