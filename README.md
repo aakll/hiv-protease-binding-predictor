@@ -52,13 +52,14 @@ This workflow emphasizes hypothesis testing, model evaluation, and practical app
 
 ```text
 ├── data/               # Raw datasets  
-│   └── raw/  
-├── notebooks/          # Analysis and modeling notebooks  
-├── src/                # Streamlit app  
+│   └── raw/
 ├── models/             # Trained model and scaler  
-├── results/            # Figures, plots, and tables  
+├── notebooks/          # Analysis and modeling notebooks
+├── results/            # Figures, plots, and tables 
+├── src/                # Streamlit app 
+├── README.md 
 ├── requirements.txt    # Python dependencies  
-└── README.md  
+└── runtime.txt         # For Streamlit cloud  
 ```
 ---
 ## Limitations and Future Work
