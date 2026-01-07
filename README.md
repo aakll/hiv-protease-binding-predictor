@@ -1,6 +1,6 @@
-# Predicting Ligand Binding Affinity to HIV-1 Protease Using Molecular Descriptors
+# Descriptor-Based Prediction of Ligand Binding Affinity for HIV-1 Protease: Applications in Early Drug Discovery
 
-I investigated whether molecular descriptors alone can predict the binding affinity (ΔG) of ligands to HIV-1 protease (PDB: 1HVR), aiming to assess the potential of descriptor-based machine learning models to reduce the need for computationally expensive docking simulations. I also expanded the study to analyze pharmaceutical relevance, including drug-likeness and FDA-approved drug validation, to demonstrate the model's applications in early-stage drug discovery.
+I investigated whether molecular descriptors alone can predict the binding affinity (ΔG) of ligands to HIV-1 protease (PDB: 1HVR), aiming to assess the potential of descriptor-based machine learning models as a fast-screening tool to reduce the need for computationally expensive docking simulations. I also expanded the study to analyze pharmaceutical relevance, including drug-likeness and FDA-approved drug validation, to demonstrate the model's applications in early-stage drug discovery.
 
 ---
 
@@ -38,7 +38,7 @@ The model demonstrates that molecular descriptors can capture substantial varian
 
 ## Virtual Screening and Application
 
-**Use it directly:** https://hiv-protease-binding-predictor-kkdxazvsay5w74pckvf9ik.streamlit.app/
+**Interactive Streamlit Demo:** https://hiv-protease-binding-predictor-kkdxazvsay5w74pckvf9ik.streamlit.app/
 
 I developed a Streamlit application to demonstrate model predictions and ability to prioritize potential drug candidates:
 
