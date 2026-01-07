@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -9,7 +8,9 @@ import requests
 
 from pathlib import Path  
 
-BASE_DIR = Path(__file__).resolve().parent.parent  
+# Fix model path for Streamlit deployment
+BASE_DIR = Path(__file__).resolve().parent  # src folder
+MODEL_DIR = BASE_DIR / "models"
 
 # Page configuration
 st.set_page_config(
@@ -17,15 +18,6 @@ st.set_page_config(
     page_icon="🧬",
     layout="wide"
 )
-
-# # Load model and scaler
-# @st.cache_resource
-# def load_model():
-#     with open(BASE_DIR / "models" / "rf_model.pkl", "rb") as f:
-#          model = pickle.load(f)
-#     with open(BASE_DIR / "models" / "scaler.pkl", "rb") as f:
-#          scaler = pickle.load(f)
-#     return model, scaler
 
 # Fetch ligand properties from PubChem
 def get_ligand_properties(cid):
@@ -42,7 +34,6 @@ def get_ligand_properties(cid):
         data = response.json()
         props = data['PropertyTable']['Properties'][0]
         
-        # Convert to float/int here
         return {
             'MW': float(props.get('MolecularWeight', 0)),
             'LogP': float(props.get('XLogP', 0)),
@@ -56,26 +47,14 @@ def get_ligand_properties(cid):
     except Exception as e:
         return {'success': False, 'error': f"Error: {str(e)}"}
 
-
 # Predict binding affinity
 def predict_affinity(properties, model, scaler):
     """
     Predict binding affinity given ligand properties
     """
-    # Create feature array in correct order
-    features = np.array([[
-        properties['MW'],
-        properties['LogP'],
-        properties['HBD'],
-        properties['HBA']
-    ]])
-    
-    # Scale features
+    features = np.array([[properties['MW'], properties['LogP'], properties['HBD'], properties['HBA']]])
     features_scaled = scaler.transform(features)
-    
-    # Predict
     prediction = model.predict(features_scaled)[0]
-    
     return prediction
 
 # Main app
@@ -83,30 +62,28 @@ def main():
     st.title("🧬 HIV-1 Protease Binding Affinity Predictor")
     st.markdown("---")
     
-    # Description
     st.markdown("""
     ### About This Tool
     This ML tool predicts the binding affinity (ΔG) of ligands to **HIV-1 protease (1HVR)** 
     based on molecular properties, and assesses drug-likeness using Lipinski's Rule of Five. 
     This eliminates the need for computationally expensive molecular docking simulations.
-                
-                
+
     **Features:**
     - 🔗 Direct PubChem integration
     - ⚡ Instant binding affinity prediction
     - 💊 Drug-likeness assessment (Lipinski's Rule of Five)
     - 🎯 Overall drug candidate evaluation
-    
-    
+
     **How to use:** Enter a PubChem Compound ID (CID) below to get predictions.
     """)
     
     st.markdown("---")
     
+    # Load model
     try:
-        with open(BASE_DIR / "models" / "rf_model.pkl", "rb") as f:
+        with open(MODEL_DIR / "rf_model.pkl", "rb") as f:
             model = pickle.load(f)
-        with open(BASE_DIR / "models" / "scaler.pkl", "rb") as f:
+        with open(MODEL_DIR / "scaler.pkl", "rb") as f:
             scaler = pickle.load(f)
     except FileNotFoundError:
         st.error("⚠️ Model files not found. Please ensure rf_model.pkl and scaler.pkl are in the models/ folder.")
@@ -122,9 +99,7 @@ def main():
             placeholder="e.g., 92727, 5362440, 64143",
             help="Find CIDs at https://pubchem.ncbi.nlm.nih.gov/"
         )
-
-        cid_input = cid_input_raw.strip()  # removes leading/trailing spaces
-        
+        cid_input = cid_input_raw.strip()
         predict_button = st.button("🔍 Predict Binding Affinity", type="primary")
     
     with col2:
@@ -148,34 +123,22 @@ def main():
                 st.error(f"❌ {properties.get('error', 'Unknown error')}")
                 st.info("💡 Make sure the CID is valid. Search at https://pubchem.ncbi.nlm.nih.gov/")
             else:
-                # Display properties
                 st.success("✅ Ligand properties retrieved successfully!")
                 
                 st.markdown("---")
                 st.subheader("📊 Ligand Properties")
-                
                 prop_col1, prop_col2, prop_col3, prop_col4 = st.columns(4)
-                
-                with prop_col1:
-                    st.metric("Molecular Weight", f"{properties['MW']:.2f} g/mol")
-                
-                with prop_col2:
-                    st.metric("LogP", f"{properties['LogP']:.2f}")
-                
-                with prop_col3:
-                    st.metric("H-Bond Donors", int(properties['HBD']))
-                
-                with prop_col4:
-                    st.metric("H-Bond Acceptors", int(properties['HBA']))
+                prop_col1.metric("Molecular Weight", f"{properties['MW']:.2f} g/mol")
+                prop_col2.metric("LogP", f"{properties['LogP']:.2f}")
+                prop_col3.metric("H-Bond Donors", int(properties['HBD']))
+                prop_col4.metric("H-Bond Acceptors", int(properties['HBA']))
 
-                 # Make prediction
                 with st.spinner("Predicting binding affinity..."):
                     delta_g = predict_affinity(properties, model, scaler)
                 
                 st.markdown("---")
                 st.subheader("🎯 Prediction Result")
                 
-                # Display prediction with color coding
                 if delta_g < -9:
                     color = "green"
                     strength = "Strong Binding"
@@ -194,40 +157,22 @@ def main():
                 """, unsafe_allow_html=True)
                 
                 st.markdown("---")
-                
-                # Drug-likeness analysis (Lipinski's Rule of Five)
-                st.markdown("---")
                 st.subheader("💊 Drug-Likeness Assessment (Lipinski's Rule of Five)")
                 
                 violations = 0
                 rules_status = []
+                rules_status.append("✅ Molecular Weight ≤ 500 Da" if properties['MW'] <= 500 else "❌ Molecular Weight > 500 Da")
+                violations += 1 if properties['MW'] > 500 else 0
                 
-                # Check each rule
-                if properties['MW'] <= 500:
-                    rules_status.append("✅ Molecular Weight ≤ 500 Da")
-                else:
-                    rules_status.append("❌ Molecular Weight > 500 Da")
-                    violations += 1
+                rules_status.append("✅ LogP ≤ 5" if properties['LogP'] <= 5 else "❌ LogP > 5")
+                violations += 1 if properties['LogP'] > 5 else 0
                 
-                if properties['LogP'] <= 5:
-                    rules_status.append("✅ LogP ≤ 5")
-                else:
-                    rules_status.append("❌ LogP > 5")
-                    violations += 1
+                rules_status.append("✅ Hydrogen Bond Donors ≤ 5" if properties['HBD'] <= 5 else "❌ Hydrogen Bond Donors > 5")
+                violations += 1 if properties['HBD'] > 5 else 0
                 
-                if properties['HBD'] <= 5:
-                    rules_status.append("✅ Hydrogen Bond Donors ≤ 5")
-                else:
-                    rules_status.append("❌ Hydrogen Bond Donors > 5")
-                    violations += 1
+                rules_status.append("✅ Hydrogen Bond Acceptors ≤ 10" if properties['HBA'] <= 10 else "❌ Hydrogen Bond Acceptors > 10")
+                violations += 1 if properties['HBA'] > 10 else 0
                 
-                if properties['HBA'] <= 10:
-                    rules_status.append("✅ Hydrogen Bond Acceptors ≤ 10")
-                else:
-                    rules_status.append("❌ Hydrogen Bond Acceptors > 10")
-                    violations += 1
-                
-                # Display rules
                 rule_col1, rule_col2 = st.columns(2)
                 with rule_col1:
                     st.write(rules_status[0])
@@ -236,7 +181,6 @@ def main():
                     st.write(rules_status[2])
                     st.write(rules_status[3])
                 
-                # Drug-likeness verdict
                 is_drug_like = violations <= 1
                 if is_drug_like:
                     st.success(f"✅ **Drug-like** ({violations} violation{'s' if violations != 1 else ''})")
@@ -245,41 +189,21 @@ def main():
                     st.warning(f"⚠️ **Not drug-like** ({violations} violations)")
                     st.info("This compound may have poor oral bioavailability. Consider structural modifications.")
                 
-                
-                # Overall drug candidate assessment
                 st.subheader("🏆 Overall Drug Candidate Assessment")
-                
                 if delta_g < -9 and is_drug_like:
                     st.success("⭐ **Excellent Drug Candidate** - Strong binding AND drug-like properties!")
                     st.balloons()
                 elif delta_g < -9 and not is_drug_like:
-                    st.warning("⚠️ **Promising but needs optimization** - Strong binding but poor drug-likeness. Consider structural modifications to improve oral bioavailability.")
+                    st.warning("⚠️ **Promising but needs optimization** - Strong binding but poor drug-likeness.")
                 elif delta_g < -7 and is_drug_like:
-                    st.info("✓ **Moderate Candidate** - Acceptable binding with good drug-like properties. May benefit from lead optimization.")
+                    st.info("✓ **Moderate Candidate** - Acceptable binding with good drug-like properties.")
                 else:
-                    st.error("❌ **Poor Candidate** - Weak binding and/or poor drug-likeness. Not recommended for further development.")
+                    st.error("❌ **Poor Candidate** - Weak binding and/or poor drug-likeness.")
                 
                 st.markdown("---")
-                
-                st.markdown("""
-                **Interpretation:**
-                - **ΔG < -9 kcal/mol**: Strong binding (high affinity)
-                - **-9 < ΔG < -7 kcal/mol**: Moderate binding
-                - **ΔG > -7 kcal/mol**: Weak binding (low affinity)
-                
-                **Drug-likeness (Lipinski's Rule):**
-                - ≤1 violation: Likely orally bioavailable
-                - >1 violation: May have ADME issues
-                
-                *Note: More negative ΔG values indicate stronger binding. Optimal drug candidates balance both strong binding and favorable pharmaceutical properties.*
-                """)
-                
-                # Show PubChem link
                 st.markdown(f"🔗 [View compound on PubChem](https://pubchem.ncbi.nlm.nih.gov/compound/{cid_input})")
     
-    # Footer
     st.markdown("---")
-
     st.markdown("""
     **Model Performance:**
     - Algorithm: Random Forest Regressor
@@ -288,7 +212,7 @@ def main():
     - Test MAE: 0.721 kcal/mol
     - Validated against FDA-approved drugs
     """)
-
+    
     st.markdown("""
     <div style="text-align: center; color: gray;">
         <p>🧬 AI-Powered Drug Discovery Tool</p>
