@@ -1,6 +1,6 @@
 # Predicting Ligand Binding Affinity to HIV-1 Protease Using Molecular Descriptors
 
-I investigated whether molecular descriptors alone can predict the binding affinity (ΔG) of ligands to HIV-1 protease (PDB: 1HVR), aiming to assess the potential of descriptor-based machine learning models to reduce the need for computationally expensive docking simulations. I also expanded the study to analyze pharmaceutical relevance, including drug-likeness and FDA-approved drug validation, to demonstrate applications in early-stage drug discovery.
+I investigated whether molecular descriptors alone can predict the binding affinity (ΔG) of ligands to HIV-1 protease (PDB: 1HVR), aiming to assess the potential of descriptor-based machine learning models to reduce the need for computationally expensive docking simulations. I also expanded the study to analyze pharmaceutical relevance, including drug-likeness and FDA-approved drug validation, to demonstrate the model's applications in early-stage drug discovery.
 
 ---
 
@@ -13,7 +13,7 @@ This project implements a hypothesis-driven computational workflow combining mol
 - **Machine learning:** Trained a Random Forest regression model to predict binding affinities.  
 - **Drug analysis:**  
   - Assessed drug-likeness using Lipinski’s Rule of Five
-  - validate my model by showing that its ability to identify clinically relevant compounds (FDA-approved drugs rank in TOP 26% of all ligands).
+  - validate my model by showing its ability to identify clinically relevant compounds (FDA-approved drugs rank in TOP 26% of all ligands).
 - **Virtual screening:** Applied the model to a library of 1000 virtual compounds to show the model's potential in a real drug discovery pipeline.
 
 All analyses and results are documented in the `notebooks/` folder.
@@ -37,6 +37,8 @@ The model demonstrates that molecular descriptors can capture substantial varian
 ---
 
 ## Virtual Screening and Application
+
+**Use it directly:**
 
 I developed a Streamlit application to demonstrate model predictions and ability to prioritize potential drug candidates:
 
