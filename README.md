@@ -38,7 +38,7 @@ The model demonstrates that molecular descriptors can capture substantial varian
 
 ## Virtual Screening and Application
 
-**Use it directly:**
+**Use it directly:** https://hiv-protease-binding-predictor-kkdxazvsay5w74pckvf9ik.streamlit.app/
 
 I developed a Streamlit application to demonstrate model predictions and ability to prioritize potential drug candidates:
 
