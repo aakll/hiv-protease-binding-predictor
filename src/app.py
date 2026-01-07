@@ -8,9 +8,9 @@ import requests
 
 from pathlib import Path  
 
-# Fix model path for Streamlit deployment
-BASE_DIR = Path(__file__).resolve().parent  # src folder
+BASE_DIR = Path(__file__).resolve().parent.parent  
 MODEL_DIR = BASE_DIR / "models"
+
 
 # Page configuration
 st.set_page_config(
