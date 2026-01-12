@@ -66,7 +66,7 @@ This workflow emphasizes hypothesis testing, model evaluation, and practical app
 ---
 ## Sustainable Development Goals Alignment
 
-This project contributes to **SDG 3: Good Health and Well-being** (Target 3.3: End epidemics of AIDS, tuberculosis, malaria by 2030) by accelerating HIV drug discovery through AI-powered virtual screening. By reducing computational time by and enabling rapid identification of potential protease inhibitors, this approach can decrease drug development costs and timelines, ultimately improving access to affordable HIV treatments globally.
+This project contributes to **SDG 3: Good Health and Well-being** (Target 3.3: End epidemics of AIDS, tuberculosis, malaria by 2030) by accelerating HIV drug discovery through AI-powered virtual screening. By reducing computational time and enabling rapid identification of potential protease inhibitors, this approach can decrease drug development costs and timelines, ultimately improving access to affordable HIV treatments globally.
 
 ---
 ## Limitations and Future Work
