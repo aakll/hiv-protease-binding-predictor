@@ -1,6 +1,6 @@
 # Descriptor-Based Prediction of Ligand Binding Affinity for HIV-1 Protease: Applications in Early Drug Discovery
 
-This project investigates whether ligand molecular descriptors alone can predict the binding affinity (ΔG) to HIV-1 protease (PDB: 1HVR), aiming to assess the potential of descriptor-based machine learning models as a fast-screening tool to reduce the need for computationally expensive docking simulations. The study is further extended to assess pharmaceutical relevance, including drug-likeness and FDA-approved drug validation, to demonstrate the model's applications in early-stage drug discovery.
+This project investigates whether ligand molecular descriptors alone can predict the docking-derived binding affinity (ΔG) to HIV-1 protease (PDB: 1HVR), aiming to assess the potential of descriptor-based machine learning models as a fast-screening tool to reduce the need for computationally expensive docking simulations. The study is further extended to assess pharmaceutical relevance, including drug-likeness and FDA-approved drug validation, to demonstrate the model's applications in early-stage drug discovery.
 
 ---
 
@@ -13,7 +13,7 @@ This project implements a hypothesis-driven computational workflow combining mol
 - **Machine learning:** Trained a Random Forest regression model to predict binding affinities.  
 - **Drug analysis:**  
   - Assessed drug-likeness using Lipinski’s Rule of Five
-  - validate my model by showing its ability to identify clinically relevant compounds (FDA-approved drugs rank in TOP 26% of all ligands).
+  - Supported the chemical relevance of the predictions within drug-like space by ranking 3 FDA-approved drugs (Darunavir, Saquinavir & Ritonavir) among the stronger predicted binders.
 - **Virtual screening:** Applied the model to a library of 1000 virtual compounds to show the model's potential in a real drug discovery pipeline.
 
 All analyses and results are documented in the `notebooks/` folder.
@@ -21,7 +21,7 @@ All analyses and results are documented in the `notebooks/` folder.
 ---
 ## Research Question
 
-Can molecular descriptors alone reliably predict protein–ligand binding affinity, and can this approach guide early-stage drug discovery by prioritizing potential drug candidates?
+Can molecular descriptors alone reliably predict docking-derived protein–ligand binding affinity, and can this approach guide early-stage drug discovery by prioritizing potential drug candidates?
 
 ---
 ## Model Performance

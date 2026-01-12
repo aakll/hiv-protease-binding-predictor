@@ -218,14 +218,13 @@ def main():
     - Test R²: 0.866
     - Test RMSE: 0.892 kcal/mol
     - Test MAE: 0.721 kcal/mol
-    - Validated against FDA-approved drugs
     """)
     
     st.markdown("""
     <div style="text-align: center; color: gray;">
         <p>🧬 AI-Powered Drug Discovery Tool</p>
         <p>Developed as part of bioinformatics research in drug design</p>
-        <p>Model trained on 50 ligands | Validated against FDA-approved HIV protease inhibitors</p>
+        <p>Model trained on 50 ligands</p>
     </div>
     """, unsafe_allow_html=True)
 
