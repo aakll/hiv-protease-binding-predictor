@@ -64,7 +64,7 @@ def main():
     
     st.markdown("""
     ### About This Tool
-    This ML tool predicts the binding affinity (ΔG) of ligands to **HIV-1 protease (1HVR)** 
+    This ML tool predicts the docking-derived binding affinity (ΔG) of ligands to **HIV-1 protease (1HVR)** 
     based on molecular properties, and assesses drug-likeness using Lipinski's Rule of Five. 
     This reduces the need for computationally expensive molecular docking simulations.
 
