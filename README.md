@@ -26,7 +26,7 @@ Can molecular descriptors alone reliably predict docking-derived protein–ligan
 ---
 ## Model Performance
 
-| Metric        | Value            |
+| Metric        | Value          |
 |---------------|----------------|
 | R² (test)     | 0.866          |
 | RMSE          | 0.891 kcal/mol |

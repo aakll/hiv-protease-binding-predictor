@@ -221,11 +221,7 @@ def main():
     """)
     
     st.markdown("""
-    <div style="text-align: center; color: gray;">
-        <p>🧬 AI-Powered Drug Discovery Tool</p>
-        <p>Developed as part of bioinformatics research in drug design</p>
-        <p>Model trained on 50 ligands</p>
-    </div>
+    **Disclaimer:** This tool provides preliminary predictions based on molecular properties.
     """, unsafe_allow_html=True)
 
 if __name__ == "__main__":
